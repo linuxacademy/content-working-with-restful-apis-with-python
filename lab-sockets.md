@@ -320,8 +320,8 @@ The `socket` package in Python allows interactions between a server and many cli
                 "cd /home/cloud_user\n",
 
                 "git init\n",
-                "git remote add origin https://github.com/linuxacademy/content-using-pythons-maths-science-and-engineering-libraries.git\n",
-                "git pull --depth=1 origin math-lab-1\n",
+                "git remote add origin https://github.com/linuxacademy/content-working-with-restful-apis-with-python.git\n",
+                "git pull --depth=1 origin lab-sockets\n",
                 "rm -rf /home/cloud_user/.git\n",
                 
                 "echo 3.8.2 > /home/cloud_user/.python-version\n",
