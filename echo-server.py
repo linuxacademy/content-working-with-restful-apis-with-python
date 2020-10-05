@@ -14,7 +14,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
 
     # set to accet connection and retrieve the address of the incoming request
     print("Waiting for connection...")
-    # write line to accept socket request
+    # write line to accept socket request, use conn and addr
     
     print(b"Connected: ", addr)
     
