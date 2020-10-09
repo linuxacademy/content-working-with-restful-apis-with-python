@@ -1,28 +1,21 @@
-import socket
+import http.server
 
-HOST = "127.0.0.1"
-PORT = 57392
 
-# create a socket for ipv4 and tcp
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+class PostHandler(http.server.BaseHTTPRequestHandler):
 
-    # bind the socket
-    sock.bind((HOST, PORT))
+    def do_POST(self):
 
-    # set socket to listen, we want no more than 1 in queue
-    sock.listen()
+        # print(self.__dict__)
 
-    # set to accet connection and retrieve the address of the incoming request
-    print("Waiting for connection...")
-    # write line to accept socket request
-    conn, addr = sock.accept()
-    print(b"Connected: ", addr)
-    
-    # receive data from echo-client
-    name = conn.recv(1024)
+        data = self.rfile.read(int(self.headers["Content-Length"]))
 
-    # send this message back
-    # "Hello Cloud Guru " + name + ".  You are a superstar!    
-    conn.sendall(b"Hello Cloud Guru " + name + b".  You are a superstar!")
+        self.send_response(201)
+        self.wfile.write(b"Hello Cloud Guru " + data + b". I am very glad you are here.")
+
+if __name__ == '__main__':
+    PORT = 57392
+    server = http.server.HTTPServer(('', PORT), PostHandler)
+    print('Starting server, use <Ctrl-C> to stop')
+    server.serve_forever()
 
 

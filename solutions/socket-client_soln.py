@@ -9,16 +9,34 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
     # connect the socket
     sock.connect((HOST, PORT))
 
-    # get name
-    name = input("What is your name? ")
+    # get the user's name
+    # used to ease reading of output
+    print("\n\n")
+    name = input("Please enter your name: ")
+    content_length = len(name)
 
+    # formatted header, do not change
+    header = """POST / HTTP/1.1 
+Host: %s
+Content-Type: text/html
+Content-Length: %s
+
+""" % (HOST, content_length)
+
+
+    payload = bytes(header + name, "utf-8")
+    # used to ease reading of output
+    print("\n\nPayload:")
+    print(payload)
+    
     # send name to echo-server, remember it is a string
-    sock.sendall(bytes(name, "utf-8"))
+    sock.sendall(payload)
 
-    #receive the data
-    data = sock.recv(1024)
+    recv = sock.recv(10000)
+    print("\n\nReceived:")
+    print(recv)
+    print("\n\n")
 
-print(data)
 
 
 
