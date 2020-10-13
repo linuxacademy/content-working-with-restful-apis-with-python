@@ -1,22 +1,54 @@
+import datetime
 from flask import Flask, json, jsonify, make_response, request
+from flask.json import JSONEncoder, JSONDecoder
+
+
+
+
+# class ContactJSONDecoder(JSONDecoder):
+
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(object_hook=self.get_datetime, *args, **kwargs)
+
+#     @staticmethod
+#     def default(self, obj):
+#         if isinstance(obj, Contact):
+#             return {
+#                 "contact_id": obj.contact_id,
+#                 "name": obj.name,
+#                 "address": obj.address,
+#                 "favorite_food": obj.favorite_food,
+#                 "last_contact": obj.last_contact.strftime("%m/%d/%Y")
+#             }
+#         return super(ContactJSONDecoder, self).default(obj)
 
 app = Flask(__name__)
 
 class Contact:
-    def __init__(self, contact_id, name, address, favorite_food):
+    def __init__(self, contact_id, name, address, favorite_food, contact_date):
         self.contact_id = contact_id
         self.name = name
         self.address = address
         self.favorite_food = favorite_food
+        self.last_contact = contact_date
     
     def serialize(self):
         return self.__dict__
 
+class ContactDateJSONEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime.date):
+            return obj.isoformat()
+        elif isinstance(obj, Contact):
+            return obj.__dict__
+        return super().default(obj)
 
+
+contact_date = (datetime.date.today() + datetime.timedelta(days=-2))
 contacts = {
-    "1": Contact("1", "Bugs Bunny", "1 Carrot Lane, Toontown", "carots"),
-    "2": Contact("2", "Sylvester", "5 Alleyway, Toontown", "Tweety"),
-    "3": Contact("3", "Scooby Doo", "32 Dog Lake, Toontowm", "Scooby Snacks")
+    "1": Contact("1", "Bugs Bunny", "1 Carrot Lane, Toontown", "carots", contact_date),
+    "2": Contact("2", "Sylvester", "5 Alleyway, Toontown", "Tweety", contact_date),
+    "3": Contact("3", "Scooby Doo", "32 Dog Lake, Toontowm", "Scooby Snacks", contact_date)
 }
 
 def update_full_contact(contact_id, data):
@@ -38,7 +70,7 @@ def remove_contact(contact_id):
 
 @app.route('/api/contacts/all', methods=['GET'])
 def get_contacts():
-    return jsonify(data=[contacts[id].serialize() for id in contacts])
+    return jsonify(contacts)
 
 
 @app.route('/api/contacts/<contact_id>', methods=['GET', 'PUT', 'PATCH', 'DELETE'])
