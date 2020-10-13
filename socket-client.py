@@ -3,20 +3,13 @@ import socket
 HOST = "127.0.0.1"
 PORT = 57392
 
-# cpmplete with statement to create a socket for ipv4 and tcp named sock
-with
+# create a socket for ipv4 and tcp named sock
     
-    # complete to connect the socket
-    sock.
-    
-    # used to ease reading output
-    print("\n\n")
+    # connect the socket
 
-    # complete to get the user's name input
-    name = 
+    # get the user's name input
     
     # complete to get content_length; length of name
-    content_length = 
 
     # formatted header, do not change
     header = """POST / HTTP/1.1 
@@ -26,18 +19,13 @@ Content-Length: %s
 
 """ % (HOST, content_length)
 
-    # complete to add the name to the header and convert to bytes
-    payload = 
+    # create the header and convert to bytes 
 
-    # used to ease reading of output
-    print("\n\nPayload:")
-    print(payload)
+    # add body and convert to bytes
     
-    # complete to send payload to echo-server
-    sock.
+    # send payload to echo-server
 
-    # complete to receive response
-    response = 
+    # receive response, label as "response"
 
     #  For Office Use Only, Please Do Not Change Code Below
     expected = b"Hello Cloud Guru " + bytes(name, 'utf-b') + b". I am very glad you are here."
