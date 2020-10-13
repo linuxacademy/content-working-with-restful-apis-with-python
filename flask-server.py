@@ -14,9 +14,9 @@ class Contact:
 
 
 contacts = {
-    1: Contact("1", "Bugs Bunny", "1 Carrot Lane, Toontown", "carots"),
-    2: Contact("2", "Sylvester", "5 Alleyway, Toontown", "Tweety"),
-    3: Contact("3", "Scooby Doo", "32 Dog Lake, Toontowm", "Scooby Snacks")
+    "1": Contact("1", "Bugs Bunny", "1 Carrot Lane, Toontown", "carots"),
+    "2": Contact("2", "Sylvester", "5 Alleyway, Toontown", "Tweety"),
+    "3": Contact("3", "Scooby Doo", "32 Dog Lake, Toontowm", "Scooby Snacks")
 }
 
 def update_full_contact(contact_id, data):
@@ -58,7 +58,7 @@ def contact(contact_id):
 @app.route('/api/contacts/new', methods=['POST'])
 def create_contact():
     data = request.get_json()
-    data["contact_id"] = int(sorted(contacts.keys())[-1]) + 1
+    data["contact_id"] = str(int(sorted(contacts.keys())[-1]) + 1)
     new_contact = Contact(**data)
     contacts[data['contact_id']] = new_contact
 
