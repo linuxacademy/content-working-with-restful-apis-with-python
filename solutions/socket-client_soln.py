@@ -32,10 +32,19 @@ Content-Length: %s
     # send name to echo-server, remember it is a string
     sock.sendall(payload)
 
-    recv = sock.recv(10000)
-    print("\n\nReceived:")
-    print(recv)
-    print("\n\n")
+    response = sock.recv(10000)
+    
+    #  For Office Use Only, Please Do Not Change Code Below
+    expected = b"Hello Cloud Guru " + bytes(name, 'utf-b') + b". I am very glad you are here."
+
+    try:
+        assert response == expected
+    except AssertionError:
+        print("Expected: ", expected)
+        print("Response: ", response)
+        print("They do not match.")
+    else:
+        print("Congratulations!  You have completed the lab.")
 
 
 

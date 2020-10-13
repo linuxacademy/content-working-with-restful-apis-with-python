@@ -12,7 +12,7 @@ with
     # used to ease reading output
     print("\n\n")
 
-    # complete to get the user's name
+    # complete to get the user's name input
     name = 
     
     # complete to get content_length; length of name
@@ -39,11 +39,17 @@ Content-Length: %s
     # complete to receive response
     response = 
 
+    #  For Office Use Only, Please Do Not Change Code Below
+    expected = b"Hello Cloud Guru " + bytes(name, 'utf-b') + b". I am very glad you are here."
 
-    print("\n\nReceived:")
-    print(response)
-    print("\n\n")
-
+    try:
+        assert response == expected
+    except AssertionError:
+        print("Expected: ", expected)
+        print("Response: ", response)
+        print("They do not match.")
+    else:
+        print("Congratulations!  You have completed the lab.")
 
 
 
