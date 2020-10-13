@@ -42,10 +42,10 @@ def patch():
 # right a delete requests to replace id #4 using json for the endpt "/"
 def delete(contact_id):
 
-    return requests.delete("http://127.0.0.1:5000/api/contacts/" + contact_id)
+    return requests.delete("http://127.0.0.1:5000/api/contacts/" + str(contact_id))
 
 if __name__ == "__main__":
-    response = delete("4")
+    response = delete(2)
     print("\n------------\n")
     print("Headers: ", response.headers)
     print("\n------------\n")
