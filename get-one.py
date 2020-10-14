@@ -4,6 +4,6 @@ import requests
 URL = "http://127.0.0.1:5000"
 
 # get contact_id #1 from the server
-response  =
+response =
 print("Status Code: %s" % response.status_code)
 print("Contact List: %s" % response.text)

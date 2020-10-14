@@ -7,7 +7,8 @@ URL = "http://127.0.0.1:5000"
 data = {
     "name": "Tweety",
     "address": None,
-    "favorite_food": "seeds"
+    "favorite_food": "seeds",
+    "last_contact": "2020-10-31"
 }
 
 response = requests.post("http://127.0.0.1:5000/api/contacts/new", json=data)
