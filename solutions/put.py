@@ -5,7 +5,7 @@ URL = "http://127.0.0.1:5000"
 
 # update tweety
 data = {
-    "id": "4",
+    "contact_id": "4",
     "name": "Tweety Bird",
     "address": "1 Bird Cage, Queensland, AUS",
     "favorite_food": "seeds, nuts, bits"
