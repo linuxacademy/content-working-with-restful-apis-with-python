@@ -19,11 +19,7 @@ Content-Length: %s
 
 """ % (HOST, content_length)
 
-    # create the header and convert to bytes 
-
-    # add body and convert to bytes
-    
-    # send payload to echo-server
+    # create the payload but turning the header and name into bytes
 
     # receive response, label as "response"
 

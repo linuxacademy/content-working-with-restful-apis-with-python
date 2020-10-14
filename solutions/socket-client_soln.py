@@ -33,6 +33,7 @@ Content-Length: %s
     sock.sendall(payload)
 
     response = sock.recv(10000)
+    print(response)
     
     #  For Office Use Only, Please Do Not Change Code Below
     expected = b"Hello Cloud Guru " + bytes(name, 'utf-b') + b". I am very glad you are here."
