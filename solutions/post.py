@@ -10,6 +10,6 @@ data = {
     "favorite_food": "seeds"
 }
 
-response =
+response = requests.post("http://127.0.0.1:5000/api/contacts/new", json=data)
 print("Status Code: %s" % response.status_code)
 print("Contact List: %s" % response.text)
