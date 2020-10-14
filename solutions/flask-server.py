@@ -2,39 +2,17 @@ import datetime
 from flask import Flask, json, jsonify, make_response, request
 from flask.json import JSONEncoder, JSONDecoder
 
-
-
-
-# class ContactJSONDecoder(JSONDecoder):
-
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(object_hook=self.get_datetime, *args, **kwargs)
-
-#     @staticmethod
-#     def default(self, obj):
-#         if isinstance(obj, Contact):
-#             return {
-#                 "contact_id": obj.contact_id,
-#                 "name": obj.name,
-#                 "address": obj.address,
-#                 "favorite_food": obj.favorite_food,
-#                 "last_contact": obj.last_contact.strftime("%m/%d/%Y")
-#             }
-#         return super(ContactJSONDecoder, self).default(obj)
-import json
-from flask import Flask, jsonify, make_response, request
-
 app = Flask(__name__)
 
 class Contact:
-    def __init__(self, contact_id, name, address, favorite_food, contact_date):
+    def __init__(self, contact_id, name, address, favorite_food, last_contact):
         self.contact_id = contact_id
         self.name = name
         self.address = address
         self.favorite_food = favorite_food
-        self.last_contact = contact_date
+        self.last_contact = last_contact
     
-    def update(self, contact_id=None, name=None, address=None, favorite_food=None, *args, **kwargs):
+    def update(self, contact_id=None, name=None, address=None, favorite_food=None, last_contact=None, *args, **kwargs):
         if contact_id:
             self.contact_id = contact_id
         if name: 
@@ -43,18 +21,34 @@ class Contact:
             self.address = address
         if favorite_food:
             self.favorite_food = favorite_food
+        if last_contact:
+            self.last_contact = last_contact
     
-    def serialize(self):
-        return self.__dict__
+    # def serialize(self):
+    #     return self.__dict_
 
-class ContactDateJSONEncoder(JSONEncoder):
+class CustomEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime.date):
             return obj.isoformat()
         elif isinstance(obj, Contact):
             return obj.__dict__
+
         return super().default(obj)
 
+class CustomDecoder(JSONDecoder):
+    def __init__(self, *args, **kwargs):
+        super().__init__(object_hook=self.decode_contact, *args, **kwargs)
+    
+    def decode_contact(self, data):
+        if "last_contact" in data:
+            data["last_contact"] = datetime.date.fromisoformat(data["last_contact"])
+
+        return data
+
+
+app.json_encoder = CustomEncoder
+app.json_decoder = CustomDecoder
 
 contact_date = (datetime.date.today() + datetime.timedelta(days=-2))
 contacts = {
@@ -65,20 +59,16 @@ contacts = {
 
 @app.route('/api/contacts/all', methods=['GET'])
 def get_contacts():
-<<<<<<< HEAD
     return jsonify(contacts)
 
-=======
-    return jsonify(data=[contacts[id].serialize() for id in contacts]), 200
->>>>>>> lab-requests-crud
 
 @app.route('/api/contacts/<contact_id>', methods=['GET', 'PUT', 'PATCH', 'DELETE'])
 def contact(contact_id):
     if request.method == 'GET':
-        return contacts[(contact_id)].serialize(), 200
+        return jsonify(contacts[(contact_id)]), 200
     elif request.method in ['PUT', 'PATCH']:
         contacts[contact_id].update(**request.get_json())
-        return contacts[contact_id].serialize(), 200
+        return jsonify(contacts[contact_id]), 200
     else:
         del contacts[contact_id]
         return get_contacts()
@@ -89,7 +79,7 @@ def create_contact():
     data["contact_id"] = str(int(sorted(contacts.keys())[-1]) + 1)
     new_contact = Contact(**data)
     contacts[data['contact_id']] = new_contact
-    return new_contact.serialize(), 201
+    return jsonify(new_contact), 201
 
 @app.errorhandler(404)
 def not_found(error):
