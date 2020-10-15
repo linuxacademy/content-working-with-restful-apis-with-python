@@ -10,8 +10,6 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
     sock.connect((HOST, PORT))
 
     # get the user's name
-    # used to ease reading of output
-    print("\n\n")
     name = input("Please enter your name: ")
     content_length = len(name)
 
@@ -25,9 +23,6 @@ Content-Length: %s
 
 
     payload = bytes(header + name, "utf-8")
-    # used to ease reading of output
-    print("\n\nPayload:")
-    print(payload)
     
     # send name to echo-server, remember it is a string
     sock.sendall(payload)

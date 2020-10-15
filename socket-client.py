@@ -24,7 +24,7 @@ Content-Length: %s
     # receive response, label as "response"
 
     #  For Office Use Only, Please Do Not Change Code Below
-    expected = b"Hello Cloud Guru " + bytes(name, 'utf-b') + b". I am very glad you are here."
+    expected = b"Hello Cloud Guru " + bytes(name, 'utf-8') + b". I am very glad you are here."
 
     try:
         assert response == expected
