@@ -4,11 +4,7 @@ import requests
 URL = "http://127.0.0.1:5000"
 
 # create a new contact name Tweety, favorite foods seeds
-data = {
-    "name": "Tweety",
-    "address": None,
-    "favorite_food": "seeds"
-}
+
 
 response =
 print("Status Code: %s" % response.status_code)
