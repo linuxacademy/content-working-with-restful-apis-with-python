@@ -1,16 +1,18 @@
-import json
-from flask import Flask, jsonify, make_response, request
+import datetime
+from flask import Flask, json, jsonify, make_response, request
+from flask.json import JSONEncoder, JSONDecoder
 
 app = Flask(__name__)
 
 class Contact:
-    def __init__(self, contact_id, name, address, favorite_food):
+    def __init__(self, contact_id, name, address, favorite_food, last_contact):
         self.contact_id = contact_id
         self.name = name
         self.address = address
         self.favorite_food = favorite_food
+        self.last_contact = last_contact
     
-    def update(self, contact_id=None, name=None, address=None, favorite_food=None, *args, **kwargs):
+    def update(self, contact_id=None, name=None, address=None, favorite_food=None, last_contact=None, *args, **kwargs):
         if contact_id:
             self.contact_id = contact_id
         if name: 
@@ -19,15 +21,17 @@ class Contact:
             self.address = address
         if favorite_food:
             self.favorite_food = favorite_food
+        if last_contact:
+            self.last_contact = last_contact
     
     def serialize(self):
         return self.__dict__
 
 
+contact_date = (datetime.date.today() + datetime.timedelta(days=-2))
 contacts = {
-    "1": Contact("1", "Bugs Bunny", "1 Carrot Lane, Toontown", "carots"),
-    "2": Contact("2", "Sylvester", "5 Alleyway, Toontown", "Tweety"),
-    "3": Contact("3", "Scooby Doo", "32 Dog Lake, Toontowm", "Scooby Snacks")
+    "1": Contact("1", "Bugs Bunny", "1 Carrot Lane, Toontown", "carots", contact_date),
+    "2": Contact("2", "Sylvester", "5 Alleyway, Toontown", "Tweety", contact_date),
 }
 
 @app.route('/api/contacts/all', methods=['GET'])

@@ -54,7 +54,6 @@ contact_date = (datetime.date.today() + datetime.timedelta(days=-2))
 contacts = {
     "1": Contact("1", "Bugs Bunny", "1 Carrot Lane, Toontown", "carots", contact_date),
     "2": Contact("2", "Sylvester", "5 Alleyway, Toontown", "Tweety", contact_date),
-    "3": Contact("3", "Scooby Doo", "32 Dog Lake, Toontowm", "Scooby Snacks", contact_date)
 }
 
 @app.route('/api/contacts/all', methods=['GET'])
