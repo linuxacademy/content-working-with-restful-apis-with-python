@@ -1,6 +1,6 @@
 import datetime
-from flask import Flask, json, jsonify, make_response, request
-from flask.json import JSONEncoder, JSONDecoder
+import json
+from flask import Flask, make_response, request
 
 app = Flask(__name__)
 
@@ -24,65 +24,42 @@ class Contact:
         if last_contact:
             self.last_contact = last_contact
     
-    # def serialize(self):
-    #     return self.__dict_
+    def serialize(self):
+        return self.__dict__
 
-class CustomEncoder(JSONEncoder):
+class CustomEncoder(json.JSONEncoder):
     def default(self, obj):
-        if isinstance(obj, datetime.date):
-            return obj.isoformat()
-        elif isinstance(obj, Contact):
+        if isinstance(obj, Contact):
             return obj.__dict__
 
         return super().default(obj)
 
-class CustomDecoder(JSONDecoder):
-    def __init__(self, *args, **kwargs):
-        super().__init__(object_hook=self.decode_contact, *args, **kwargs)
-    
-    def decode_contact(self, data):
-        if "last_contact" in data:
-            data["last_contact"] = datetime.date.fromisoformat(data["last_contact"])
-
-        return data
-
-
-app.json_encoder = CustomEncoder
-app.json_decoder = CustomDecoder
-
 contact_date = (datetime.date.today() + datetime.timedelta(days=-2))
 contacts = {
-    "1": Contact("1", "Bugs Bunny", "1 Carrot Lane, Toontown", "carots", contact_date),
-    "2": Contact("2", "Sylvester", "5 Alleyway, Toontown", "Tweety", contact_date),
+    "1": Contact("1", "Bugs Bunny", "1 Carrot Lane, Toontown", "carots", contact_date.isoformat()),
+    "2": Contact("2", "Sylvester", "5 Alleyway, Toontown", "Tweety", contact_date.isoformat()),
 }
 
 @app.route('/api/contacts/all', methods=['GET'])
 def get_contacts():
-    return jsonify(contacts)
+    return json.dumps(contacts, cls=CustomEncoder)
 
 
 @app.route('/api/contacts/<contact_id>', methods=['GET', 'PUT', 'PATCH', 'DELETE'])
 def contact(contact_id):
     if request.method == 'GET':
-        return jsonify(contacts[(contact_id)]), 200
+        return json.dumps(contacts[(contact_id)], cls=CustomEncoder), 200
     elif request.method in ['PUT', 'PATCH']:
-        contacts[contact_id].update(**request.get_json())
-        return jsonify(contacts[contact_id]), 200
+        data = json.loads(request.get_json())
+        contacts[contact_id].update(**data)
+        return json.dumps(contacts[contact_id], cls=CustomEncoder), 200
     else:
         del contacts[contact_id]
         return get_contacts()
 
-@app.route('/api/contacts/new', methods=['POST'])
-def create_contact():
-    data = request.get_json()
-    data["contact_id"] = str(int(sorted(contacts.keys())[-1]) + 1)
-    new_contact = Contact(**data)
-    contacts[data['contact_id']] = new_contact
-    return jsonify(new_contact), 201
-
 @app.errorhandler(404)
 def not_found(error):
-    return make_response(jsonify({"error": "Not found"}), 404)
+    return make_response(json.dumps({"error": "Not found"}), 404)
 
 if __name__ == "__main__":
     app.run(debug=True)
