@@ -12,7 +12,7 @@ PORT = 57392
     # complete to get content_length; length of name
 
     # formatted header, do not change
-    header = """POST / HTTP/1.1 
+    request = """POST / HTTP/1.1 
 Host: %s
 Content-Type: text/html
 Content-Length: %s

@@ -14,7 +14,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
     content_length = len(name)
 
     # formatted header, do not change
-    header = """POST / HTTP/1.1 
+    request = """POST / HTTP/1.1 
 Host: %s
 Content-Type: text/html
 Content-Length: %s
@@ -22,7 +22,7 @@ Content-Length: %s
 """ % (HOST, content_length)
 
 
-    payload = bytes(header + name, "utf-8")
+    payload = bytes(request + name, "utf-8")
     
     # send name to echo-server, remember it is a string
     sock.sendall(payload)
