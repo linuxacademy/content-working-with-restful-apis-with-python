@@ -50,7 +50,7 @@ def contact(contact_id):
     if request.method == 'GET':
         return json.dumps(contacts[(contact_id)], cls=CustomEncoder), 200
     elif request.method in ['PUT', 'PATCH']:
-        data = json.loads(request.get_json())
+        data = json.loads(request.data)
         contacts[contact_id].update(**data)
         return json.dumps(contacts[contact_id], cls=CustomEncoder), 200
     else:
