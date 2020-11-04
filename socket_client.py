@@ -11,7 +11,7 @@ PORT = 57392
     
     # complete to get content_length; length of name
 
-    # formatted header, do not change
+    # formatted request, do not change
     request = """POST / HTTP/1.1 
 Host: %s
 Content-Type: text/html
@@ -19,7 +19,7 @@ Content-Length: %s
 
 """ % (HOST, content_length)
 
-    # create the payload but turning the header and name into bytes
+    # create the payload but turning the request and name into bytes
 
     # receive response, label as "response"
 
